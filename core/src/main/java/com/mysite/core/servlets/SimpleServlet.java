@@ -15,6 +15,8 @@
  */
 package com.mysite.core.servlets;
 
+import com.mysite.core.services.ClassServiceConfiguration;
+import com.mysite.core.services.Student;
 import com.mysite.core.services.StudentClassService;
 import com.mysite.core.services.StudentClassValidatorService;
 
@@ -50,16 +52,60 @@ public class SimpleServlet extends SlingSafeMethodsServlet {
     private StudentClassValidatorService studentClassValidatorService;
     @Reference
     private StudentClassService studentClassService;
+    @Override
+    public void init() throws ServletException {
+        studentClassService.addStudent(new Student(1, "Harshit", 100));
+        studentClassService.addStudent(new Student(2, "John", 90));
+        studentClassService.addStudent(new Student(3, "Ram", 55));
+        studentClassService.addStudent(new Student(4, "Lakhan", 40));
 
+    }
     
     @Override
     protected void doGet(final SlingHttpServletRequest req,
             final SlingHttpServletResponse resp) throws ServletException, IOException {
-    	int a = Integer.parseInt(req.getParameter("action"));
-    	List studentList = Arrays.asList(req.getParameterValues("list"));
+        int id,marks;
+        String name;
+        int choice = Integer.parseInt(req.getParameter("Choice"));
+        switch(choice){
+            case 1 :
+                resp.getWriter().println("First List  :" + studentClassService.getAllStudent());
+                id = Integer.parseInt(req.getParameter("id"));
+                name = req.getParameter("name");
 
+                marks = Integer.parseInt(req.getParameter("marks"));
+                studentClassService.addStudent(new Student(id,name,marks));
+                resp.getWriter().println("Student added");
+                resp.getWriter().println("Modified List:" +studentClassService.getAllStudent());
+                break;
+            case 2 :
 
-    	resp.getWriter().write("A = " + studentClassValidatorService.isClassLimitReached(studentList) + " marks = " + studentClassValidatorService.getPassingMarks());
+                resp.getWriter().println("List of student :" +studentClassService.getAllStudent());
+                break;
+
+            case 3 : resp.getWriter().println("First List :" + studentClassService.getAllStudent());
+                id = Integer.parseInt(req.getParameter("id"));
+                resp.getWriter().println("Student info with given id  :" +studentClassService.getStudent(id));
+                break;
+
+            case 4 :  resp.getWriter().println("First List :" + studentClassService.getAllStudent());
+                id = Integer.parseInt(req.getParameter("id"));
+                studentClassService.deleteStudent(id);
+                resp.getWriter().println("Student deleted");
+                resp.getWriter().println("Modified List :" +studentClassService.getAllStudent());
+                break;
+
+            case 5:
+                resp.getWriter().println("LIST INITIALLY  :" + studentClassService.getAllStudent());
+                id = Integer.parseInt(req.getParameter("id"));
+                resp.getWriter().println("Is the student with given id passed : "+studentClassService.isStudentPassed(id));
+                break;
+
+            case 6 :   resp.getWriter().println("Passing marks : "+ studentClassValidatorService.getPassingMarks());
+                break;
+
+            default: resp.getWriter().println("Enter a valid choice");
+        }
 
         }
 }
