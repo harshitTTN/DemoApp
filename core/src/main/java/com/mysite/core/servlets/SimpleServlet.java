@@ -15,6 +15,7 @@
  */
 package com.mysite.core.servlets;
 
+import com.mysite.core.services.StudentClassService;
 import com.mysite.core.services.StudentClassValidatorService;
 
 import java.util.Arrays;
@@ -43,17 +44,22 @@ import java.io.IOException;
 @SlingServletPaths(value = "/bin/myservlet")
 public class SimpleServlet extends SlingSafeMethodsServlet {
 
-//    private static final long serialVersionUID = 1L;
-//    private static List l;
+
     
     @Reference
     private StudentClassValidatorService studentClassValidatorService;
+    @Reference
+    private StudentClassService studentClassService;
+
     
     @Override
     protected void doGet(final SlingHttpServletRequest req,
             final SlingHttpServletResponse resp) throws ServletException, IOException {
     	int a = Integer.parseInt(req.getParameter("action"));
-    	List l = Arrays.asList(req.getParameterValues("list"));
-    	resp.getWriter().write("A = " + studentClassValidatorService.isClassLimitReached(l) + " marks = " + studentClassValidatorService.getPassingMarks(a));
-    }
+    	List studentList = Arrays.asList(req.getParameterValues("list"));
+
+
+    	resp.getWriter().write("A = " + studentClassValidatorService.isClassLimitReached(studentList) + " marks = " + studentClassValidatorService.getPassingMarks());
+
+        }
 }

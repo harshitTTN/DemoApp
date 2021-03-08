@@ -3,8 +3,10 @@ package com.mysite.core.services.impl;
 
 import java.util.List;
 
+import com.mysite.core.services.Student;
 import com.mysite.core.services.StudentClassValidatorService;
 import com.mysite.core.services.ClassServiceConfiguration;
+
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Modified;
@@ -20,19 +22,22 @@ public class StudentClassValidatorServiceImpl implements StudentClassValidatorSe
 
 	private static Logger logger = LoggerFactory.getLogger(StudentClassValidatorServiceImpl.class);
 	private int classSize;
-	private int marks;
-		
+	private int passing_marks;
+
+
 	@Activate
 	@Modified
 	protected void activate(ClassServiceConfiguration config) {
 		classSize = config.noOfStudents();
-		marks = config.score();
+		passing_marks = config.score();
+
 	}
 	
 	
 	@Override
-	public boolean isClassLimitReached(List l) {
-		if(l.size() >= classSize)
+	public boolean isClassLimitReached(List<Student> studentList) {
+
+		if(studentList.size() >= classSize)
 		return true;
 		else
 			return false;
@@ -40,11 +45,11 @@ public class StudentClassValidatorServiceImpl implements StudentClassValidatorSe
 	}
 
 	@Override
-	public int getPassingMarks(int a) {
-		return marks;
-		
+	public int getPassingMarks() {
+		return passing_marks;
 
 }
 
+	}
 
-}
+

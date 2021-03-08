@@ -5,6 +5,8 @@ import org.osgi.service.metatype.annotations.AttributeDefinition;
 import org.osgi.service.metatype.annotations.AttributeType;
 import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 
+import java.util.List;
+
 @ObjectClassDefinition(name="Class service configuration")
 public @interface ClassServiceConfiguration {
 
@@ -17,6 +19,7 @@ public @interface ClassServiceConfiguration {
             name = "Passing Marks",
             type = AttributeType.INTEGER)
     int score() default 40;
+
 }
 
 
